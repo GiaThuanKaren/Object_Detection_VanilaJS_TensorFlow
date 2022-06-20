@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .Main-Container {
+        display: flex;
+        justify-content: space-between;
+        height: 100vh;
+        overflow: hidden;
+    }
+</style>
+
+<body>
+    <!-- Load TensorFlow.js. This is required to use coco-ssd model. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+    <!-- Load the coco-ssd model. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+
+    <!-- Replace this with your image. Make sure CORS settings allow reading the image! -->
+    <!-- <img crossorigin='anonymous'
+        src="https://static5.depositphotos.com/1000270/486/i/600/depositphotos_4869272-stock-photo-bengal-cat-light-brown-cream.jpg" /> -->
+    <div class="Main-Container">
+        <video muted id="img" autoplay controls crossorigin='anonymous'
+            src="./asset/[Jiyugaoka Walk in Tokyo] Fashionable spot ♪ (4K ASMR non-stop 1 hour 04 minutes).mp4"></video>
+        <!-- <iframe width="914" height="514" id="img"
+            src="https://www.youtube.com/embed/tTuUjnISt9s?list=PLcQZGj9lFR7y5WikozDSrdk6UCtAnM9mB"
+            title="4K Tokyo Drive thru Ikebukuro, Shinjuku, Shibuya" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe> -->
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <!-- <iframe  width="1476" height="499"
+        
+        src="https://www.youtube.com/embed/14gy2t65uwU?list=PLcQZGj9lFR7y5WikozDSrdk6UCtAnM9mB"
+        title="[Jiyugaoka Walk in Tokyo] Fashionable spot ♪ (4K ASMR non-stop 1 hour 04 minutes)" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe> -->
+    <!-- Place your code in the script tag below. You can also use an external .js file -->
+    <script>
+        // Notice there is no 'import' statement. 'cocoSsd' and 'tf' is
+        // available on the index-page because of the script tag above.
+
+        const img = document.getElementById('img');
+        const list = document.querySelector('ul')
+        // Load the model.
+
+        setInterval(() => {
+            // console.log("detecing")
+            cocoSsd.load().then(model => {
+                // detect objects in the image.
+                model.detect(img).then(predictions => {
+                    console.log('Predictions: ', predictions);
+                    let arr = predictions.map(function (item, idx) {
+                        let html = `
+                            <li>
+                                <p>${item.class}</p>
+                                <p>${item.score}</p>
+                            </li>
+                            `
+                        return html
+                    }).join('');
+                    // console.log(arr)
+                    list.innerHTML = arr || "Deteting"
+
+                });
+            });
+        }, 2500)
+
+    </script>
+</body>
+
+</html>
